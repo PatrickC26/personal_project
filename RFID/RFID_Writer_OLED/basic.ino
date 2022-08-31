@@ -49,7 +49,7 @@ void setup() {
     Serial.println("Please Enter a UID (4 UID only & Form should be correct) Ex:AA;3B;6C;FF;");
     int UIDno = 0;
     String intemp = "";
-    while(!Serial.available()) ;
+    while(!Serial.available());
     while(Serial.available()){
       char in = Serial.read();
       if (in == ';'){

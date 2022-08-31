@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>樹懶創客｜sloth maker</title>
+    </head>
+    <body>
+        <center>
+            <h1>
+                Barcode Scanner
+            </h1>
+            
+            
+            <br>
+            
+            <form>
+            To find Serial : <input class="editor" id "T_name" type="text" name="name">
+                <button type="button" name="button" id="button" onclick="load();" >確定</button>
+            </form>
+            <br>
+          
+            <h3>
+                <P style = "color:red">*
+                123456789*
+                </p>
+                <P style = "color:black">*
+                    123456789*
+                </p>
+            </h3>
+
+            <br>
+
+            <h4>
+                Server Start Time : 2022-06-06  22:17:18 *
+            </h4>
+            
+            <button type="button" name="button" id="button" onclick="restart();" > Restart Server </button>
+            
+            <h5>
+                © 樹懶創客 sloth maker 2022
+            </h5>
+            
+            <img src="https://patrickc26.github.io/slothMaker-notify/root/ftp/logo/color_500.png" alt="Sloth Maker" style="width:50px;height:50px;">
+            
+            
+          
+          
+      </center>
+  </body>
+  
+
+  <script>
+        
+    class values {
+        static dataAmount = ""
+    }
+      
+    values.dataAmount = firebaseGET("dataAmount");
+    
+    var t=setInterval(runFunction,3000);
+
+    function runFunction(){
+        if (values.dataAmount != firebaseGET("dataAmount"))
+            location.reload();
+        console.log("reload");
+    }
+    
+    function load(){
+        try{
+            var innerS = String(document.querySelector('.editor').value);
+            if (innerS != null && innerS != ""){
+                console.log(innerS);
+                firebasePUT("add2Found", innerS);
+                window.alert("成功登錄");
+                location.reload();
+            }
+            else{
+                window.alert("名字不可空白");
+            }
+        }
+        catch(Exception){
+            window.alert("名字不可空白，或特殊符號");
+        }
+    }
+    
+    
+    function restart(){
+      firebasePUT("reStart", "1");
+    }
+    
+      
+    function firebaseGET(dic) {
+        let url= "http://192.168.68.125/" + dic;
+        var time = 0;
+        do{
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "GET", url, false ); // false for synchronous request
+            xmlHttp.send( null );
+            console.log( xmlHttp.responseText);
+            var inS = xmlHttp.responseText;
+            return inS;
+            time++;
+        }while(xmlHttp.status != 200 && time <= 5)
+        
+        if (time > 4){
+            window.alert("登錄失敗，請重新登錄\nerr code : GET - " + response.status);
+            window.location.href = redirectURL;
+        }
+        return "";
+    }
+      
+      
+    function firebasePUT(dic , text) {
+        let url= "http://192.168.68.125/" + dic;
+        var time = 0;
+        var backB = false;
+        
+        while(time <= 5){
+            time ++;
+            fetch(url,{
+                method: 'PUT',
+                header: {"plain": "plain"},
+                body: text
+            })
+            .then(response => {
+                console.log('response.status: ', response.status);
+                if (response.status == 200 ){
+                    backB =  true;
+                    time = 9;
+                }
+                else if (time > 5){
+                    window.alert("訊息傳送失敗，請再試一次\nerr code : PUT - " + response.status);
+                    time = 9;
+                }
+            });
+            return backB;
+        }
+        return false;
+    }
+      
+      
+  </script>
+</html>
