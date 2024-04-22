@@ -1,10 +1,13 @@
 bool keysSit[] = {false,false,false,false,false,false,false,false,false};
 bool lastKeysSit[] = {false,false,false,false,false,false,false,false,false};
+unsigned long lastKeysTime[] = {0,0,0,0,0,0,0,0,0};
 
 void keyboard(){
   for (int i = 0 ; i < 9 ; i++){
     lastKeysSit[i] = keysSit[i];
     keysSit[i] = !digitalRead(allkeys[i]);
+//    if (keysSit[i] && !lastKeysSit[i])
+//      lastKeysTime[i] = millis();
   }
 }
 
@@ -31,7 +34,8 @@ void keysOperate(){
   
   for (int i = 0 ; i < 9 ; i++){
     if (keysSit[i]){
-      if (!lastKeysSit[i]){
+      if ((!lastKeysSit[i]) || (millis() - lastKeysTime[i] > 300)){
+        lastKeysTime[i] = millis();
         
         if (funckeys[i] < 16){
           if (funckeys[i] % 2 == 1)

@@ -5,18 +5,21 @@ import firebase
 
 # set pins
 R_PIN = 20
-G_PIN = 26
-B_PIN = 21
+G_PIN = 16
+B_PIN = 26
+GND_PIN = 19 
 
 # set GPIO mode
 GPIO.setmode(GPIO.BCM)
 
 # set GPIO IOs
 GPIO.setup(R_PIN, GPIO.OUT)
+GPIO.setup(GND_PIN, GPIO.OUT)
 GPIO.setup(G_PIN, GPIO.OUT)
 GPIO.setup(B_PIN, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 
 # let led turn OFF
+GPIO.output(GND_PIN, GPIO.LOW)
 GPIO.output(G_PIN, GPIO.LOW)
 GPIO.output(R_PIN, GPIO.LOW)
 
@@ -31,15 +34,15 @@ def shutDownCheck():
 def shoutDown():
     GPIO.output(R_PIN, GPIO.HIGH)
     GPIO.output(G_PIN, GPIO.LOW)
-        nowtime = timeGET()
-        firebasePUT("lastCheck",nowtime)
-        firebasePUT("renewTime",nowtime)
-        firebasePUT("on_off","off")
-        firebasePUT("record/" + currentNo, firebaseGET("record/" + currentNo) + "," + nowtime)
-        os.system("shutdown now -h")
-        #GPIO.cleanup()
-        while (True):
-            time.sleep(1)
+    nowtime = timeGET()
+    firebasePUT("lastCheck",nowtime)
+    firebasePUT("renewTime",nowtime)
+    firebasePUT("on_off","off")
+    firebasePUT("record/" + currentNo, firebaseGET("record/" + currentNo) + "," + nowtime)
+    os.system("shutdown now -h")
+    #GPIO.cleanup()
+    while (True):
+        time.sleep(1)
 
 connectionType = 0 # 0 -> No // 1 -> Yes
 status_light_status = 0 # 0 -> N // 1 -> Y

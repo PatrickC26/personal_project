@@ -113,5 +113,5 @@ int eepromGet(){
   // Change light status 
   if (light > 150)
     light = 150;
-  analogWrite(10, light); // up to 150
+  
 }

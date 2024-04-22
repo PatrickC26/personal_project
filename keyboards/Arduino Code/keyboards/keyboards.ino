@@ -34,8 +34,12 @@ void setup() {
     pinMode(allkeys[i], INPUT_PULLUP);
   }
 
-  checkModeGet();
-  
+  Serial.print("Current mode is : ");
+  Serial.println(checkModeGet());
+
+  analogWrite(10, 200);
+
+  delay(400);
   
   for (int i = 0 ; i < 9 ; i++){
     pinMode(allkeys[i], OUTPUT);
@@ -45,7 +49,9 @@ void setup() {
 
 
   eepromGet();
-  checkMode();
+  Serial.println(checkMode());
+
+  analogWrite(10, light); // up to 150
   
   
   for (int i = 0 ; i < 9 ; i++){
